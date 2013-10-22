@@ -45,11 +45,11 @@ Additional Options
 
 The HTML5 Thumbnails plugin accepts some additional options during setup. Add these to the object which contains the video ID.
 
-**id** - (required) The ID of the original video element.
+**id** - (string, required) The ID of the original video element.
 
-**scale** - (optional) A number from 0 to 1 where 1 is 100% of the original video size and 0 is 0%. A default value of 0.35 is used.
+**scale** - (decimal, optional) A number from 0 to 1 where 1 is 100% of the original video size and 0 is 0%. A default value of 0.35 is used.
 
-**loaderSize** - (optional) The number of pixels to make the loading spinner. If no value is present then the default of 32 pixels is used.
+**loaderSize** - (integer, optional) The number of pixels to make the loading spinner. If no value is present then the default of 32 pixels is used.
 
 Example:
 
