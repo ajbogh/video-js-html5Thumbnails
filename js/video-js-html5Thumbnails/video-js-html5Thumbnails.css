@@ -1,0 +1,12 @@
+.vjs-thumbnail-spinner {
+	border: 5px solid #fff;
+	border-right-color: transparent;
+	border-radius: 50%;
+	box-sizing: border-box;
+	/*box-shadow: 0 0 25px 2px #eee;*/
+	-webkit-animation: spin 1s linear infinite;
+	-moz-animation: spin 1s linear infinite;
+	-ms-animation: spin 1s linear infinite;
+	-o-animation: spin 1s linear infinite;
+	animation: spin 1s linear infinite;
+}

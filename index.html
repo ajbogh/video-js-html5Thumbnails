@@ -1,0 +1,32 @@
+<!-- DOCTYPE html -->
+<html>
+
+<head>
+	<title>video.js Canvas Thumbs Example</title>
+	<link href="//vjs.zencdn.net/4.1/video-js.css" rel="stylesheet">
+	<link href="js/video-js-html5Thumbnails/video-js-html5Thumbnails.css" rel="stylesheet">
+	<script type="text/javascript" src="//vjs.zencdn.net/4.1/video.js"></script>
+	<script type="text/javascript" src="js/video-js-html5Thumbnails/video-js-html5Thumbnails.js"></script>
+</head>
+
+<body>
+	<video id="video" class="video-js vjs-default-skin"
+		controls preload="auto" width="640" height="264"
+		poster="http://video-js.zencoder.com/oceans-clip.png"
+		data-setup='{"example_option":true}'>
+		<source src="http://video-js.zencoder.com/oceans-clip.mp4" type='video/mp4' />
+		<source src="http://video-js.zencoder.com/oceans-clip.webm" type='video/webm' />
+		<source src="http://video-js.zencoder.com/oceans-clip.ogv" type='video/ogg' />
+	</video>
+	<div id="videojs-thumbnail"></div>
+</body>
+<script>
+	// initialize video.js on a video
+	var video = videojs('video');
+
+	// initialize the html5Thumbnails plugin.
+	// plugin requires the video id.
+	video.html5Thumbnails({id:'video'});
+	</script>
+
+</html>
