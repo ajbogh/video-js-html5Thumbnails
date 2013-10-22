@@ -6,11 +6,11 @@ A plugin for video.js to add thumbnail previews when hovering the mouse over the
 Setup
 -----
 
-- Include the CSS
+Include the CSS
 
     <link href="js/video-js-html5Thumbnails/video-js-html5Thumbnails.css" rel="stylesheet">
 
-- Include the html5Thumbnails plugin
+Include the html5Thumbnails plugin
 
     <script type="text/javascript" src="js/video-js-html5Thumbnails/video-js-html5Thumbnails.js"></script>
 
