@@ -33,6 +33,7 @@
 		var video = document.getElementById(settings.id).getElementsByTagName("video")[0].cloneNode(true);
 		video.className = "";
 		video.removeAttribute("data-setup");
+		video.muted = true;
 		video.id = "vjs-thumbnail-video";
 
 		// create the thumbnail
