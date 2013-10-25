@@ -51,10 +51,13 @@ The HTML5 Thumbnails plugin accepts some additional options during setup. Add th
 
 **loaderSize** - (integer, optional) The number of pixels to make the loading spinner. If no value is present then the default of 32 pixels is used.
 
+**autoPlay** - (boolean, optional) Allows the thumbnail video to play automatically and stop automatically. Note: this may eat up bandwidth.
+
 Example:
 
     video.html5Thumbnails({
         id:'video', 
         scale: 0.25,
-        loaderSize: 25
+        loaderSize: 25,
+        autoPlay: true
     });

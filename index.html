@@ -20,12 +20,20 @@
 	</video>
 </body>
 <script>
+	//ignore this
+	var hash = document.location.hash;
+	var autoPlay = false;
+	if(hash.indexOf("autoPlay=true") > -1){
+		autoPlay = true;
+	}
+	//ignore above
+
 	// initialize video.js on a video
 	var video = videojs('video');
 
 	// initialize the html5Thumbnails plugin.
 	// plugin requires the video id.
-	video.html5Thumbnails({id:'video'});
+	video.html5Thumbnails({id:'video', autoPlay: autoPlay});
 	</script>
 
 </html>

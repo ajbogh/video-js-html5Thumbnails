@@ -85,6 +85,10 @@
 			div.style.display = 'block';
 			loader.style.display = 'block';
 
+			if(settings.autoPlay){
+				video.play(); //make sure the video doesn't continue downloading on mouse out.
+			}
+
 			var x = event.clientX;
 			var percentX = x / w;
 
@@ -125,6 +129,9 @@
 
 
 		progressControl.el()[eventHandler]('mouseout', function(){
+			if(settings.autoPlay){
+				video.pause(); //make sure the video doesn't continue downloading on mouse out.
+			}
 			hideInterval = setInterval(function(){
 				if(div.style.opacity <= 0){
 					clearInterval(hideInterval);
