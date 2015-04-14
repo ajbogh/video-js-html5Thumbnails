@@ -1,0 +1,23 @@
+{
+  "name": "video-js-html5Thumbnails",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.html",
+  "author": "Allan Bogh",
+  "license": "MIT",
+  "repository" :{ 
+    "type" : "git", 
+    "url" : "https://github.com/ajbogh/video-js-html5Thumbnails.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-jshint": "^1.9.0",
+    "gulp-livereload": "^2.1.1",
+    "gulp-open": "^0.3.1",
+    "gulp-watch": "^2.0.0",
+    "gulp-webserver": "^0.8.7"
+  }
+}

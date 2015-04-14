@@ -14,60 +14,109 @@
 					obj[prop] = source[prop];
 				}
 			}
-		};
+		}
 		return obj;
 	};
 
-	videojs.plugin('html5Thumbnails', function(options) {
-		var addEventListener, div, settings, canvas, player, progressControl, duration, loader, scaleFactor, loaderSize;
-		settings = extend(defaults, options);
-		scaleFactor = settings.scale || 0.35;
+	function buildThumbnailContainers(settings, player){
+		var div, video, loader, progressControl;
+
+		var scaleFactor = settings.scale || 0.35,
 		loaderSize = settings.loaderSize || 32;
 
-		player = this;
-
-		if(!settings.id){
-			throw new Error("Invalid Parameter: an object containing the video ID is required. Example: video.html5Thumbnails({id:'video'})");
-		}
-
-		var video = document.getElementById(settings.id).getElementsByTagName("video")[0].cloneNode(true);
+		var mainPlayerVideo = document.getElementById(settings.id).getElementsByTagName("video")[0];
+		video = mainPlayerVideo.cloneNode(true);
 		video.className = "";
 		video.removeAttribute("data-setup");
 		video.muted = true;
 		video.id = "vjs-thumbnail-video";
+		video.className = 'vjs-thumbnail-video';
 
 		// create the thumbnail
 		div = document.createElement('div');
 		div.className = 'vjs-thumbnail-holder';
 
+		//get the player width and height from the API
 		var w = player.width();
 		var h = player.height();
+
+		//calculate the thumbnail width and height
 		div.height = (h * scaleFactor > 32 ? h * scaleFactor : 32);
 		div.width = (w * scaleFactor > 32 ? w * scaleFactor : 32);
+		
+		//set the thumbnail container width and height
 		div.style.width = div.width;
 		div.style.height = div.height;
-		div.style.opacity = 0;
+
+		//set the thumbnail container width and height
 		video.height = div.height;
 		video.width = div.width;
 
+		//hide the thumbnail by default
+		div.style.opacity = 0;
+
+		//append the video thumbnail to its container
 		div.appendChild(video);
+
+		//adjust the position
 		div.style.top = div.style.top - div.height;
 		div.style.position = "absolute";
 
+		//create a throbber container
 		loader = document.createElement('div');
+		loader.className = "vjs-thumbnail-spinner";
+
 		loader.style.position = "absolute";
 
+		//set the throbber size
 		loader.style.width = loader.style.height = loader.width = loader.height = loaderSize;
 		
-		loader.className = "vjs-thumbnail-spinner";
+		//position the throbber
 		loader.style.left = (div.width / 2) - ((loader.width) / 2);
 		loader.style.top = (div.height / 2) - ((loader.height) / 2);
 
+		//append the throbber to the thumbnail container
 		div.appendChild(loader);
 	
 		// add the thumbnail to the player
 		progressControl = player.controlBar.progressControl;
 		progressControl.el().appendChild(div);
+
+		return {
+			div: div,
+			video: video,
+			loader: loader,
+			progressControl: progressControl,
+			mainPlayerVideo: mainPlayerVideo
+		};
+	}
+
+	function showThumb(div, loader){
+		div.style.opacity = '1';
+		div.style.display = 'block';
+		loader.style.display = 'block';
+	}
+
+	videojs.plugin('html5Thumbnails', function(options) {
+		var addEventListener, settings, canvas, player, duration, scaleFactor, loaderSize;
+		settings = extend(defaults, options);
+
+		player = this;
+
+		//get the player width and height from the API
+		var w = player.width();
+		var h = player.height();
+
+		if(!settings.id){
+			throw new Error("Invalid Parameter: an object containing the video ID is required. Example: video.html5Thumbnails({id:'video'})");
+		}
+
+		var thumbnailElems = buildThumbnailContainers(settings, player),
+		div = thumbnailElems.div,
+		video = thumbnailElems.video,
+		loader = thumbnailElems.loader,
+		progressControl = thumbnailElems.progressControl,
+		mainPlayerVideo = thumbnailElems.mainPlayerVideo;
 		
 		var timeout, hideInterval;
 
@@ -80,17 +129,16 @@
 			loader.style.display = 'none';
 		});
 
+		var trackPosition = false;
 		progressControl.el()[eventHandler]('mouseover', function(event) {
 			clearInterval(hideInterval);
-			div.style.opacity = '1';
-			div.style.display = 'block';
-			loader.style.display = 'block';
+			showThumb(div, loader);
 
 			if(settings.autoPlay){
 				video.play(); //make sure the video doesn't continue downloading on mouse out.
 			}
-
-			var x = event.clientX;
+ 
+ 			var x = event.clientX - mainPlayerVideo.getBoundingClientRect().left;
 			var percentX = x / w;
 
 			if(timeout){
@@ -102,13 +150,18 @@
 		}, false);
 
 		progressControl.el()[eventHandler]('mousemove', function(event) {
+			// console.log(mainPlayerVideo.getBoundingClientRect(), event);
+			// if(new RegExp(/(vjs-thumbnail-)/g).test(event.target.className)) {
+			// 	console.log("returning", event.target.className);
+			// 	return;
+			// }
 			clearInterval(hideInterval);
-			var x = event.clientX;
+			var x = event.clientX - mainPlayerVideo.getBoundingClientRect().left;
+			//var x = event.offsetX;
 			var percentX = x / w;
+			//console.log("----mousemove", event, x, percentX);
 
-			div.style.opacity = '1';
-			div.style.display = 'block';
-			loader.style.display = 'block';
+			showThumb(div, loader);
 
 			if(x + (div.width / 2) > w){
 				div.style.left = w - div.width;
@@ -135,9 +188,11 @@
 			}
 			hideInterval = setInterval(function(){
 				if(div.style.opacity <= 0){
+					div.style.display = "none";
+					loader.style.display = "none";
 					clearInterval(hideInterval);
 				}
-				div.style.opacity = +(div.style.opacity)-.02;
+				div.style.opacity = +(div.style.opacity)-0.02;
 			}, 10);
 		}, false);
 	});
