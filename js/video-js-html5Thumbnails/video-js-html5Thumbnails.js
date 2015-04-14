@@ -150,16 +150,10 @@
 		}, false);
 
 		progressControl.el()[eventHandler]('mousemove', function(event) {
-			// console.log(mainPlayerVideo.getBoundingClientRect(), event);
-			// if(new RegExp(/(vjs-thumbnail-)/g).test(event.target.className)) {
-			// 	console.log("returning", event.target.className);
-			// 	return;
-			// }
 			clearInterval(hideInterval);
 			var x = event.clientX - mainPlayerVideo.getBoundingClientRect().left;
 			//var x = event.offsetX;
 			var percentX = x / w;
-			//console.log("----mousemove", event, x, percentX);
 
 			showThumb(div, loader);
 
