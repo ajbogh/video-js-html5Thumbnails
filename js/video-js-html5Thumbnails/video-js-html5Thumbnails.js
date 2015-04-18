@@ -86,8 +86,7 @@
 			div: div,
 			video: video,
 			loader: loader,
-			progressControl: progressControl,
-			mainPlayerVideo: mainPlayerVideo //deprecated
+			progressControl: progressControl
 		};
 	}
 
@@ -134,7 +133,7 @@
 			clearInterval(hideInterval);
 			var boundingClientRect = mainPlayerVideo.getBoundingClientRect();
 			var w = boundingClientRect.width;
-			
+
 			showThumb(div, loader);
 
 			if(settings.autoPlay){
