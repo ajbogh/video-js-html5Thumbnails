@@ -87,7 +87,7 @@
 			video: video,
 			loader: loader,
 			progressControl: progressControl,
-			mainPlayerVideo: mainPlayerVideo
+			mainPlayerVideo: mainPlayerVideo //deprecated
 		};
 	}
 
@@ -97,15 +97,11 @@
 		loader.style.display = 'block';
 	}
 
-	videojs.plugin('html5Thumbnails', function(options) {
+	videojs.plugin('html5Thumbnails', function html5Thumbnails(options) {
 		var addEventListener, settings, canvas, player, duration, scaleFactor, loaderSize;
 		settings = extend(defaults, options);
 
 		player = this;
-
-		//get the player width and height from the API
-		var w = player.width();
-		var h = player.height();
 
 		if(!settings.id){
 			throw new Error("Invalid Parameter: an object containing the video ID is required. Example: video.html5Thumbnails({id:'video'})");
@@ -116,11 +112,15 @@
 		video = thumbnailElems.video,
 		loader = thumbnailElems.loader,
 		progressControl = thumbnailElems.progressControl,
-		mainPlayerVideo = thumbnailElems.mainPlayerVideo;
+		mainPlayerVideo = videojs(settings.id).el();
 		
 		var timeout, hideInterval;
 
 		var eventHandler = video.addEventListener ? "addEventListener" : "attachEvent";
+
+		function getWidth(){
+			return videojs(settings.id).width();
+		}
 
 		video[eventHandler]("seeked", function(){
 			loader.style.display = 'none';
@@ -130,15 +130,18 @@
 		});
 
 		var trackPosition = false;
-		progressControl.el()[eventHandler]('mouseover', function(event) {
+		progressControl.el()[eventHandler]('mouseover', function mouseover(event) {
 			clearInterval(hideInterval);
+			var boundingClientRect = mainPlayerVideo.getBoundingClientRect();
+			var w = boundingClientRect.width;
+			
 			showThumb(div, loader);
 
 			if(settings.autoPlay){
 				video.play(); //make sure the video doesn't continue downloading on mouse out.
 			}
  
- 			var x = event.clientX - mainPlayerVideo.getBoundingClientRect().left;
+ 			var x = event.clientX - boundingClientRect.left;
 			var percentX = x / w;
 
 			if(timeout){
@@ -149,9 +152,11 @@
 			}, 25);
 		}, false);
 
-		progressControl.el()[eventHandler]('mousemove', function(event) {
+		progressControl.el()[eventHandler]('mousemove', function mousemove(event) {
 			clearInterval(hideInterval);
-			var x = event.clientX - mainPlayerVideo.getBoundingClientRect().left;
+			var boundingClientRect = mainPlayerVideo.getBoundingClientRect();
+			var w = boundingClientRect.width;
+			var x = event.clientX - boundingClientRect.left;
 			//var x = event.offsetX;
 			var percentX = x / w;
 
@@ -176,7 +181,7 @@
 		}, false);
 
 
-		progressControl.el()[eventHandler]('mouseout', function(){
+		progressControl.el()[eventHandler]('mouseout', function mouseout(){
 			if(settings.autoPlay){
 				video.pause(); //make sure the video doesn't continue downloading on mouse out.
 			}
